@@ -1,0 +1,27 @@
+
+
+try {
+  $token=(get-variable REQ_HEADERS_X-MS-TOKEN-AAD-ID-TOKEN).value
+ $usera=(get-Variable REQ_HEADERS_X-MS-CLIENT-PRINCIPAL-NAME).value
+ $tenant=""
+ $user="$usera@$tenant.onmicrosoft.com"
+  $Authorization = "Bearer $token"
+$Password = ConvertTo-SecureString -AsPlainText $Authorization -Force
+$Ctoken = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $Password
+    $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $password
+   
+   $exchangeSession = New-PSSession -ConfigurationName Microsoft.Exchange `
+   -ConnectionUri "https://outlook.office365.com/powershell-liveid/" `
+   -Credential $cred -Authentication Basic  `
+   -AllowRedirection -ErrorAction Continue
+   $error="none"
+}
+catch {
+    $error="an error occured " + $_
+}
+
+
+
+$result="Welcome $user Error: $error"
+
+Out-File -Encoding Ascii -FilePath $res -inputObject $result
